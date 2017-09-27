@@ -53,9 +53,9 @@ function varify1()
 				return false;
 				else if (inArray(tal[c1-1],arr1) || inArray(tal[c1+1],arr1)) {
 					return false;
+				}
 				else if (tal[c1-1]=="(") {
 					return false;
-				}
 				}
 		}
 		if(count < 0)
@@ -69,7 +69,6 @@ function varify2()
 	return true;
 }
 
-
 function cal1(temp)//get all brackets out
 {
 	var temp_result="";
@@ -77,9 +76,9 @@ function cal1(temp)//get all brackets out
 	if( temp.indexOf("(") != -1)
 	{
 		temp_result=temp.substring(temp.indexOf("(")+1,temp.lastIndexOf(")"));
-		result.concat(temp.substring(0,temp.indexOf("(")),cal(temp_result));
+		result+=temp.substring(0,temp.indexOf("("))+cal(temp_result);
 		if(temp.lastIndexOf(")")!=temp.length-1)
-			result.concat(temp.substring(temp.lastIndexOf(")")+1);
+			result+=temp.substring(temp.lastIndexOf(")")+1);
 		return result;
 	}
 	else
@@ -87,16 +86,71 @@ function cal1(temp)//get all brackets out
 }
 
 
+
+function get_pointOfcc(temp,begin_point)
+{
+	var var_t1=temp.indexOf("*",begin_point);
+	var var_t2=temp.indexOf("/",begin_point);
+	if(var_t1==-1)
+		if(var_t2==-1)
+			return -1;
+		else {
+			return var_t2;
+		}
+	else if (var_t2==-1) {
+		return var_t1;
+	}
+	else if (var_t1>var_t2) {
+		return var_t2;
+	}
+	return var_t1;
+}
+
 function cal2(temp)//get all * and / out
 {
+window.alert("sss:   "+result.toString());
+	var result=1;
+	var pointer=0;
 
+	if(get_pointOfcc(temp,pointer)==-1)
+		return temp;
+	else {
+		result*=parseInt(temp.substring(pointer,get_pointOfcc(temp,pointer)));
+		pointer=get_pointOfcc(temp,pointer)+1;
+	}
+
+	while(pointer<temp.length)
+	{
+		var temp_var=get_pointOfcc(temp,pointer);
+		if(temp==-1)
+		{
+			if(temp[pointer-1]=="*"){
+				result*=parseInt(temp.substring(pointer));
+			}
+			else {
+				result/=parseInt(temp.substring(pointer));
+			}
+			pointer=temp.length;
+		}
+		else {
+			if(temp[pointer-1]=="*"){
+				result*=parseInt(temp.substring(pointer,temp_var);
+			}
+			else {
+				result*=parseInt(temp.substring(pointer,temp_var);
+			}
+			pointer=temp_var+1;
+		}
+	}
+	window.alert("sss:   "+result.toString());
+	return result.toString();
 }
 
 
-function get_pointOfaddOrdel(temp,bigan_point)
+function get_pointOfaddOrdel(temp,begin_point)
 {
-	var var_t1=temp.indexOf("+",began_point);
-	var var_t2=temp.indexOf("-",began_point);
+	var var_t1=temp.indexOf("+",begin_point);
+	var var_t2=temp.indexOf("-",begin_point);
 	if(var_t1==-1)
 		if(var_t2==-1)
 			return -1;
@@ -116,7 +170,7 @@ function cal(temp1)
 {
 	var temp = cal1(temp1);
 
-	/* calculate such as 1+2*3/4-5,and return result as string*/
+	// calculate such as 1+2*3/4-5,and return result as string
 	var pointer=0;
 	var temp_result="";
 	var sum=0;
@@ -126,28 +180,32 @@ function cal(temp1)
 		var temp_var=get_pointOfaddOrdel(temp,pointer);
 		if(temp_var==-1)
 		{
-			temp_result.concat(cal2(temp.substring(pointer)));
+			temp_result+=cal2(temp.substring(pointer));
 			pointer=temp.length;
 		}
 		else
 		{
-			temp_result.concat(cal2(temp.substring(pointer,temp_var)),temp[temp_var]);
+			temp_result+=cal2(temp.substring(pointer,temp_var))+temp[temp_var];
 			pointer=temp_var+1;
 		}
 	}
 
+
+	window.alert("res: "+temp_result+ "temp :" + temp1);
+	temp_result=temp;
 	pointer=0;
 	while(pointer<temp_result.length)
 	{
 		var temp_var=get_pointOfaddOrdel(temp_result,pointer);
 		if(temp_var==-1)
 		{
-			sum+=parseInt(temp_result.substring(pointer,temp_result))
+			sum+=parseInt(temp_result.substring(pointer));
+			pointer=temp_result.length;
 		}
 		else
 		{
-			temp_result.concat(cal2(temp.substring(pointer,temp_var)),temp[temp_var]);
-			pointer=temp_var+1;
+			sum+=parseInt(temp.substring(pointer,temp_var));
+			pointer=temp_var;
 		}
 	}
 
@@ -157,7 +215,7 @@ function cal(temp1)
 function calculate()
 {
 	if(varify1() && varify2()){
-		cal(tal);
+		tal=cal(tal);
 	}
 	else {
 		window.alert("wrong format");
