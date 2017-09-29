@@ -5,6 +5,8 @@ var tal="0";
 var arr1=["+","-","*","/"];
 var arr2=["1","2","3","4","5","6","7","8","9","0"];
 
+var err=1;
+
 function get(var1)
 {
 	if(tal!="0"||var1=='.')
@@ -108,7 +110,6 @@ function get_pointOfcc(temp,begin_point)
 
 function cal2(temp)//get all * and / out
 {
-window.alert("sss:   "+result.toString());
 	var result=1;
 	var pointer=0;
 
@@ -122,27 +123,38 @@ window.alert("sss:   "+result.toString());
 	while(pointer<temp.length)
 	{
 		var temp_var=get_pointOfcc(temp,pointer);
-		if(temp==-1)
+		if(temp_var==-1)
 		{
 			if(temp[pointer-1]=="*"){
 				result*=parseInt(temp.substring(pointer));
 			}
 			else {
-				result/=parseInt(temp.substring(pointer));
+				var s_temp=parseInt(temp.substring(pointer));
+				if(s_temp!=0)
+					result/=parseInt(temp.substring(pointer));
+				else {
+					window.alert("You could not make '0' as a divisor!");
+					err=1;
+				}
 			}
 			pointer=temp.length;
 		}
 		else {
 			if(temp[pointer-1]=="*"){
-				result*=parseInt(temp.substring(pointer,temp_var);
+				result*=parseInt(temp.substring(pointer,temp_var));
 			}
 			else {
-				result*=parseInt(temp.substring(pointer,temp_var);
+				var s_temp=parseInt(temp.substring(pointer,temp_var));
+				if(s_temp!=0)
+					result/=s_temp;
+				else {
+					window.alert("You could not make '0' as a divisor!");
+					err=1;
+				}
 			}
 			pointer=temp_var+1;
 		}
 	}
-	window.alert("sss:   "+result.toString());
 	return result.toString();
 }
 
@@ -165,7 +177,6 @@ function get_pointOfaddOrdel(temp,begin_point)
 	}
 	return var_t1;
 }
-
 function cal(temp1)
 {
 	var temp = cal1(temp1);
@@ -190,13 +201,26 @@ function cal(temp1)
 		}
 	}
 
-
-	window.alert("res: "+temp_result+ "temp :" + temp1);
-	temp_result=temp;
 	pointer=0;
+
+	var temp_var=get_pointOfaddOrdel(temp_result,pointer);
+	if(temp_var==0)
+		temp_var=get_pointOfaddOrdel(temp_result,pointer+1);
+	if(temp_var==-1)
+	{
+		sum+=parseInt(temp_result.substring(pointer));
+		pointer=temp_result.length;
+	}
+	else
+	{
+		var qwe=temp_result.substring(pointer,temp_var);
+		sum+=parseInt(qwe);
+		pointer=temp_var;
+	}
+
 	while(pointer<temp_result.length)
 	{
-		var temp_var=get_pointOfaddOrdel(temp_result,pointer);
+		temp_var=get_pointOfaddOrdel(temp_result,pointer+1);
 		if(temp_var==-1)
 		{
 			sum+=parseInt(temp_result.substring(pointer));
@@ -204,7 +228,8 @@ function cal(temp1)
 		}
 		else
 		{
-			sum+=parseInt(temp.substring(pointer,temp_var));
+			var qwe=temp_result.substring(pointer,temp_var);
+			sum+=parseInt(qwe);
 			pointer=temp_var;
 		}
 	}
@@ -221,6 +246,8 @@ function calculate()
 		window.alert("wrong format");
 		tal="0";
 	}
+	if(err==1)
+		tal="0";
 	document.getElementById("demo").innerHTML=tal;
 }
 
