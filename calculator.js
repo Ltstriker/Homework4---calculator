@@ -68,6 +68,15 @@ function varify1()
 
 function varify2()
 {
+	for(var c1=0;c1<tal.length;c1++)
+	{
+		if(tal[c1] == '.')
+		{
+			if(c1==0 || !inArray(tal[c1-1],arr2) || c1 == tal-1 || !inArray(tal[c1+1],arr2))
+				return false;
+		}
+	}
+
 	return true;
 }
 
@@ -116,7 +125,7 @@ function cal2(temp)//get all * and / out
 	if(get_pointOfcc(temp,pointer)==-1)
 		return temp;
 	else {
-		result*=parseInt(temp.substring(pointer,get_pointOfcc(temp,pointer)));
+		result*=parseFloat(temp.substring(pointer,get_pointOfcc(temp,pointer)));
 		pointer=get_pointOfcc(temp,pointer)+1;
 	}
 
@@ -126,12 +135,12 @@ function cal2(temp)//get all * and / out
 		if(temp_var==-1)
 		{
 			if(temp[pointer-1]=="*"){
-				result*=parseInt(temp.substring(pointer));
+				result*=parseFloat(temp.substring(pointer));
 			}
 			else {
-				var s_temp=parseInt(temp.substring(pointer));
+				var s_temp=parseFloat(temp.substring(pointer));
 				if(s_temp!=0)
-					result/=parseInt(temp.substring(pointer));
+					result/=parseFloat(temp.substring(pointer));
 				else {
 					window.alert("You could not make '0' as a divisor!");
 					err=1;
@@ -141,10 +150,10 @@ function cal2(temp)//get all * and / out
 		}
 		else {
 			if(temp[pointer-1]=="*"){
-				result*=parseInt(temp.substring(pointer,temp_var));
+				result*=parseFloat(temp.substring(pointer,temp_var));
 			}
 			else {
-				var s_temp=parseInt(temp.substring(pointer,temp_var));
+				var s_temp=parseFloat(temp.substring(pointer,temp_var));
 				if(s_temp!=0)
 					result/=s_temp;
 				else {
@@ -208,13 +217,13 @@ function cal(temp1)
 		temp_var=get_pointOfaddOrdel(temp_result,pointer+1);
 	if(temp_var==-1)
 	{
-		sum+=parseInt(temp_result.substring(pointer));
+		sum+=parseFloat(temp_result.substring(pointer));
 		pointer=temp_result.length;
 	}
 	else
 	{
 		var qwe=temp_result.substring(pointer,temp_var);
-		sum+=parseInt(qwe);
+		sum+=parseFloat(qwe);
 		pointer=temp_var;
 	}
 
@@ -223,13 +232,13 @@ function cal(temp1)
 		temp_var=get_pointOfaddOrdel(temp_result,pointer+1);
 		if(temp_var==-1)
 		{
-			sum+=parseInt(temp_result.substring(pointer));
+			sum+=parseFloat(temp_result.substring(pointer));
 			pointer=temp_result.length;
 		}
 		else
 		{
 			var qwe=temp_result.substring(pointer,temp_var);
-			sum+=parseInt(qwe);
+			sum+=parseFloat(qwe);
 			pointer=temp_var;
 		}
 	}
@@ -246,8 +255,6 @@ function calculate()
 		window.alert("wrong format");
 		tal="0";
 	}
-	if(err==1)
-		tal="0";
 	document.getElementById("demo").innerHTML=tal;
 }
 
